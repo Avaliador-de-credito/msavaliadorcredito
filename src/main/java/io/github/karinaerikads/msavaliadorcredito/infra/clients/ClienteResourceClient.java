@@ -10,4 +10,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ClienteResourceClient {
     @GetMapping(params = "cpf")
     ResponseEntity<DadosCliente> dadosClientes(@RequestParam("cpf") String cpf);
+
 }

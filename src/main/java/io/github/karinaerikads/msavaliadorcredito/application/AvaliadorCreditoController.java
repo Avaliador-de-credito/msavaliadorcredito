@@ -2,16 +2,15 @@ package io.github.karinaerikads.msavaliadorcredito.application;
 
 import io.github.karinaerikads.msavaliadorcredito.application.exception.DadosClienteNotFoundException;
 import io.github.karinaerikads.msavaliadorcredito.application.exception.ErroComunicacaoMicroserviceException;
+import io.github.karinaerikads.msavaliadorcredito.domain.model.DadosAvaliacao;
 import io.github.karinaerikads.msavaliadorcredito.domain.model.DadosCliente;
+import io.github.karinaerikads.msavaliadorcredito.domain.model.RetornoAvaliacaoCliente;
 import io.github.karinaerikads.msavaliadorcredito.domain.model.SituacaoCliente;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("avaliacoes-credito")
@@ -36,6 +35,17 @@ public class AvaliadorCreditoController {
         } catch (ErroComunicacaoMicroserviceException e) {
             return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
         }
+    }
 
+    @PostMapping
+    public ResponseEntity realizarAvaliacao(@RequestBody DadosAvaliacao dadosAvaliacao){
+        try {
+            RetornoAvaliacaoCliente retornoAvaliacaoCliente = avaliadorCreditoService.realizarAvaliacao(dadosAvaliacao.getCpf(), dadosAvaliacao.getRenda());
+            return ResponseEntity.ok(retornoAvaliacaoCliente);
+        } catch (DadosClienteNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (ErroComunicacaoMicroserviceException e) {
+            return ResponseEntity.status(HttpStatus.resolve(e.getStatus())).body(e.getMessage());
+        }
     }
 }
