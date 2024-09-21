@@ -24,8 +24,6 @@ public class AvaliadorCreditoService {
     public SituacaoCliente obterSituacaoCliente(String cpf)
             throws DadosClienteNotFoundException, ErroComunicacaoMicroserviceException{
         try {
-
-
             ResponseEntity<DadosCliente> dadosClientesResponse = clienteResourceClient.dadosClientes(cpf);
             ResponseEntity<List<CartaoCliente>> cartaoResponse = cartoesResourceClient.getCartoesByCliente(cpf);
 
